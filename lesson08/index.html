@@ -198,8 +198,11 @@
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 
         var normalMatrix = mat3.create();
-        mat4.toInverseMat3(mvMatrix, normalMatrix);
-        mat3.transpose(normalMatrix);
+        // Update:
+        //   mat4.toInverseMat3(mvMatrix, normalMatrix);
+        //   mat3.transpose(normalMatrix);
+        // These two methods have been combined into a single method in the mat3 class, mat3.normalFromMat4().
+        mat3.normalFromMat4(normalMatrix, mvMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
 
