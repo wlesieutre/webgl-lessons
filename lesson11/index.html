@@ -355,8 +355,11 @@
                 parseFloat(document.getElementById("lightDirectionZ").value)
             ];
             var adjustedLD = vec3.create();
-            vec3.normalize(lightingDirection, adjustedLD);
-            vec3.scale(adjustedLD, -1);
+            // Update: vec3.normalize(lightingDirection, adjustedLD); vec3.normalize() API has reversed the parameters.
+            vec3.normalize(adjustedLD, lightingDirection);
+            // Update: vec3.scale(adjustedLD, -1); vec3.scale() API has changed to vec3.scale(out, a, b)
+            // where out is the receiving vector and a is the vector to scale.
+            vec3.scale(adjustedLD, adjustedLD, -1);
             gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
 
             gl.uniform3f(
