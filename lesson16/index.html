@@ -708,7 +708,8 @@
 
         mvPushMatrix();
 
-        mat4.translate(mvMatrix, mvMatrix, [0, -0.4, -2.2]);
+        // z altered to approximate original scene.
+        mat4.translate(mvMatrix, mvMatrix, [0, -0.4, -1.7]);
         mat4.rotate(mvMatrix, mvMatrix, degToRad(laptopAngle), [0, 1, 0]);
         mat4.rotate(mvMatrix, mvMatrix, degToRad(-90), [1, 0, 0]);
 

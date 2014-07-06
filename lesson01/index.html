@@ -152,8 +152,9 @@
         mat4.identity(mvMatrix);
 
         // Update: mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]); mat4.translate() API has changed to mat4.translate(out, a, v)
-        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
-        mat4.translate(mvMatrix, mvMatrix, [-1.5, 0.0, -7.0]);
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by. z altered to
+        // approximate original scene.
+        mat4.translate(mvMatrix, mvMatrix, [-1.5, 0.0, -5.4]);
         gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
         setMatrixUniforms();
