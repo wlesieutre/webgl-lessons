@@ -20,13 +20,13 @@ Here's an outline of the necessary changes.
 * mat4.toInverseMat3(mvMatrix, normalMatrix) and mat3.transpose(normalMatrix) have been combined
   into a single method in the mat3 class, mat3.normalFromMat4().
 
-* the API of mat4.perspective has been rearranged so that
+* the API of mat4.perspective() has been rearranged so that
 
     mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 
   becomes
 
-    mat4.perspective (pMatrix, 45.0, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
+    mat4.perspective(pMatrix, 45.0, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
 
 * the API for a number of relevant methods now take as arguments the matrix (or vector) to be
   acted upon and the matrix (or vector) to receive the action. These include mat4.translate(),
