@@ -61,7 +61,7 @@
   var gl;
   function initGL(canvas) {
     try {
-      gl = canvas.getContext("experimental-webgl");
+      gl = canvas.getContext("webgl");
       gl.viewportWidth = canvas.width;
       gl.viewportHeight = canvas.height;
     } catch(e) {
@@ -163,7 +163,7 @@
     texture.image = new Image();
     texture.image.onload = function() {
       handleLoadedTexture(texture)
-    }
+    };
 
     texture.image.src = "smoke.gif";
   }
@@ -188,7 +188,7 @@
        1,  1,
        1, -1,
       -1, -1,
-       1,  1,
+       1,  1
     ];
     textureCoordsCycle = [
       0, 1,
@@ -196,7 +196,7 @@
       1, 1,
       1, 0,
       0, 0,
-      1, 1,
+      1, 1
     ];
     for (var i=0; i < numParticles; i++)  {
       var lifetime = (Math.random() * 0.75) + 0.25;
