@@ -635,10 +635,12 @@
         mat4.identity(mvMatrix);
 
         mat4.translate(mvMatrix, [0, 0, -5]);
-        mat4.rotate(mvMatrix, degToRad(30), [1, 0, 0]);
+        // Update: mat4.rotate(mvMatrix, degToRad(30), [1, 0, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
+        // where out is the receiving matrix and a is the matrix to rotate.
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(30), [1, 0, 0]);
 
         mvPushMatrix();
-        mat4.rotate(mvMatrix, degToRad(moonAngle), [0, 1, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(moonAngle), [0, 1, 0]);
         mat4.translate(mvMatrix, [2, 0, 0]);
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, moonTexture);
@@ -660,7 +662,7 @@
 
 
         mvPushMatrix();
-        mat4.rotate(mvMatrix, degToRad(cubeAngle), [0, 1, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(cubeAngle), [0, 1, 0]);
         mat4.translate(mvMatrix, [1.25, 0, 0]);
         gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -705,8 +707,8 @@
         mvPushMatrix();
 
         mat4.translate(mvMatrix, [0, -0.4, -2.2]);
-        mat4.rotate(mvMatrix, degToRad(laptopAngle), [0, 1, 0]);
-        mat4.rotate(mvMatrix, degToRad(-90), [1, 0, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(laptopAngle), [0, 1, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(-90), [1, 0, 0]);
 
         gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, true);
         gl.uniform3f(shaderProgram.pointLightingLocationUniform, -1, 2, -1);

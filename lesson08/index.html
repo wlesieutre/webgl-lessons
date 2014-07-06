@@ -423,8 +423,10 @@
 
         mat4.translate(mvMatrix, [0.0, 0.0, z]);
 
-        mat4.rotate(mvMatrix, degToRad(xRot), [1, 0, 0]);
-        mat4.rotate(mvMatrix, degToRad(yRot), [0, 1, 0]);
+        // Update: mat4.rotate(mvMatrix, degToRad(xRot), [1, 0, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
+        // where out is the receiving matrix and a is the matrix to rotate.
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(xRot), [1, 0, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(yRot), [0, 1, 0]);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);

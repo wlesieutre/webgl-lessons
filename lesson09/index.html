@@ -274,12 +274,14 @@
         mvPushMatrix();
 
         // Move to the star's position
-        mat4.rotate(mvMatrix, degToRad(this.angle), [0.0, 1.0, 0.0]);
+        // Update: mat4.rotate(mvMatrix, degToRad(this.angle), [0.0, 1.0, 0.0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
+        // where out is the receiving matrix and a is the matrix to rotate.
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(this.angle), [0.0, 1.0, 0.0]);
         mat4.translate(mvMatrix, [this.dist, 0.0, 0.0]);
 
         // Rotate back so that the star is facing the viewer
-        mat4.rotate(mvMatrix, degToRad(-this.angle), [0.0, 1.0, 0.0]);
-        mat4.rotate(mvMatrix, degToRad(-tilt), [1.0, 0.0, 0.0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(-this.angle), [0.0, 1.0, 0.0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(-tilt), [1.0, 0.0, 0.0]);
 
         if (twinkle) {
             // Draw a non-rotating star in the alternate "twinkling" color
@@ -288,7 +290,7 @@
         }
 
         // All stars spin around the Z axis at the same rate
-        mat4.rotate(mvMatrix, degToRad(spin), [0.0, 0.0, 1.0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(spin), [0.0, 0.0, 1.0]);
 
         // Draw the star in its main color
         gl.uniform3f(shaderProgram.colorUniform, this.r, this.g, this.b);
@@ -353,7 +355,7 @@
 
         mat4.identity(mvMatrix);
         mat4.translate(mvMatrix, [0.0, 0.0, zoom]);
-        mat4.rotate(mvMatrix, degToRad(tilt), [1.0, 0.0, 0.0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(tilt), [1.0, 0.0, 0.0]);
 
         var twinkle = document.getElementById("twinkle").checked;
         for (var i in stars) {
