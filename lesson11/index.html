@@ -372,7 +372,9 @@
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [0, 0, -6]);
+        // Update: mat4.translate(mvMatrix, [0, 0, -6]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
+        mat4.translate(mvMatrix, mvMatrix, [0, 0, -6]);
 
         mat4.multiply(mvMatrix, moonRotationMatrix);
 

@@ -298,7 +298,9 @@
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [-1.5, 0.0, -8.0]);
+        // Update: mat4.translate(mvMatrix, [-1.5, 0.0, -8.0]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
+        mat4.translate(mvMatrix, mvMatrix, [-1.5, 0.0, -8.0]);
 
         mvPushMatrix();
         // Update: mat4.rotate(mvMatrix, degToRad(rPyramid), [0, 1, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
@@ -317,7 +319,7 @@
         mvPopMatrix();
 
 
-        mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
+        mat4.translate(mvMatrix, mvMatrix, [3.0, 0.0, 0.0]);
 
         mvPushMatrix();
         mat4.rotate(mvMatrix, mvMatrix, degToRad(rCube), [1, 1, 1]);

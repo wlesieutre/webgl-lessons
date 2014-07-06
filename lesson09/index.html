@@ -277,7 +277,9 @@
         // Update: mat4.rotate(mvMatrix, degToRad(this.angle), [0.0, 1.0, 0.0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
         // where out is the receiving matrix and a is the matrix to rotate.
         mat4.rotate(mvMatrix, mvMatrix, degToRad(this.angle), [0.0, 1.0, 0.0]);
-        mat4.translate(mvMatrix, [this.dist, 0.0, 0.0]);
+        // Update: mat4.translate(mvMatrix, [this.dist, 0.0, 0.0]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
+        mat4.translate(mvMatrix, mvMatrix, [this.dist, 0.0, 0.0]);
 
         // Rotate back so that the star is facing the viewer
         mat4.rotate(mvMatrix, mvMatrix, degToRad(-this.angle), [0.0, 1.0, 0.0]);
@@ -354,7 +356,7 @@
         gl.enable(gl.BLEND);
 
         mat4.identity(mvMatrix);
-        mat4.translate(mvMatrix, [0.0, 0.0, zoom]);
+        mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, zoom]);
         mat4.rotate(mvMatrix, mvMatrix, degToRad(tilt), [1.0, 0.0, 0.0]);
 
         var twinkle = document.getElementById("twinkle").checked;

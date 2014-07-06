@@ -300,7 +300,9 @@
         // where out is the receiving matrix and a is the matrix to rotate.
         mat4.rotate(mvMatrix, mvMatrix, degToRad(-pitch), [1, 0, 0]);
         mat4.rotate(mvMatrix, mvMatrix, degToRad(-yaw), [0, 1, 0]);
-        mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]);
+        // Update: mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
+        mat4.translate(mvMatrix, mvMatrix, [-xPos, -yPos, -zPos]);
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, mudTexture);

@@ -484,13 +484,15 @@
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [0, 0, -20]);
+        // Update: mat4.translate(mvMatrix, [0, 0, -20]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
+        mat4.translate(mvMatrix, mvMatrix, [0, 0, -20]);
 
         mvPushMatrix();
         // Update: mat4.rotate(mvMatrix, degToRad(moonAngle), [0, 1, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
         // where out is the receiving matrix and a is the matrix to rotate.
         mat4.rotate(mvMatrix, mvMatrix, degToRad(moonAngle), [0, 1, 0]);
-        mat4.translate(mvMatrix, [5, 0, 0]);
+        mat4.translate(mvMatrix, mvMatrix, [5, 0, 0]);
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, moonTexture);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
@@ -511,7 +513,7 @@
 
         mvPushMatrix();
         mat4.rotate(mvMatrix, mvMatrix, degToRad(cubeAngle), [0, 1, 0]);
-        mat4.translate(mvMatrix, [5, 0, 0]);
+        mat4.translate(mvMatrix, mvMatrix, [5, 0, 0]);
         gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
