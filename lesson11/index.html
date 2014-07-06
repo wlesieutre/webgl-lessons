@@ -243,7 +243,8 @@
         var deltaY = newY - lastMouseY;
         mat4.rotate(newRotationMatrix, newRotationMatrix, degToRad(deltaY / 10), [1, 0, 0]);
 
-        mat4.multiply(newRotationMatrix, moonRotationMatrix, moonRotationMatrix);
+        // Update: mat4.multiply(newRotationMatrix, moonRotationMatrix, moonRotationMatrix); API has changed.
+        mat4.multiply(moonRotationMatrix, newRotationMatrix, moonRotationMatrix);
 
         lastMouseX = newX
         lastMouseY = newY;
@@ -376,7 +377,7 @@
         // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
         mat4.translate(mvMatrix, mvMatrix, [0, 0, -6]);
 
-        mat4.multiply(mvMatrix, moonRotationMatrix);
+        mat4.multiply(mvMatrix, mvMatrix, moonRotationMatrix);
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, moonTexture);
