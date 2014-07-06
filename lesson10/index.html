@@ -135,7 +135,7 @@
         mudTexture.image = new Image();
         mudTexture.image.onload = function () {
             handleLoadedTexture(mudTexture)
-        }
+        };
 
         mudTexture.image.src = "mud.gif";
     }
@@ -278,7 +278,7 @@
             if (request.readyState == 4) {
                 handleLoadedWorld(request.responseText);
             }
-        }
+        };
         request.send();
     }
 

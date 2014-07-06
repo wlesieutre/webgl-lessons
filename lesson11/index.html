@@ -164,7 +164,7 @@
         moonTexture.image = new Image();
         moonTexture.image.onload = function () {
             handleLoadedTexture(moonTexture)
-        }
+        };
 
         moonTexture.image.src = "moon.gif";
     }
@@ -233,7 +233,7 @@
         var newX = event.clientX;
         var newY = event.clientY;
 
-        var deltaX = newX - lastMouseX
+        var deltaX = newX - lastMouseX;
         var newRotationMatrix = mat4.create();
         mat4.identity(newRotationMatrix);
         // Update: mat4.rotate(newRotationMatrix, degToRad(deltaX / 10), [0, 1, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
@@ -246,7 +246,7 @@
         // Update: mat4.multiply(newRotationMatrix, moonRotationMatrix, moonRotationMatrix); API has changed.
         mat4.multiply(moonRotationMatrix, newRotationMatrix, moonRotationMatrix);
 
-        lastMouseX = newX
+        lastMouseX = newX;
         lastMouseY = newY;
     }
 

@@ -213,14 +213,14 @@
         moonTexture.image = new Image();
         moonTexture.image.onload = function () {
             handleLoadedTexture(moonTexture)
-        }
+        };
         moonTexture.image.src = "moon.gif";
 
         crateTexture = gl.createTexture();
         crateTexture.image = new Image();
         crateTexture.image.onload = function () {
             handleLoadedTexture(crateTexture)
-        }
+        };
         crateTexture.image.src = "crate.gif";
     }
 
@@ -343,7 +343,7 @@
             -1.0, -1.0, -1.0,
             -1.0, -1.0,  1.0,
             -1.0,  1.0,  1.0,
-            -1.0,  1.0, -1.0,
+            -1.0,  1.0, -1.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
         cubeVertexPositionBuffer.itemSize = 3;
@@ -386,7 +386,7 @@
             -1.0,  0.0,  0.0,
             -1.0,  0.0,  0.0,
             -1.0,  0.0,  0.0,
-            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
         cubeVertexNormalBuffer.itemSize = 3;
@@ -530,7 +530,7 @@
              0.580687, 0.659, 0.813106,
             -0.580687, 0.659, 0.813107,
              0.580687, 0.472, 0.113121,
-            -0.580687, 0.472, 0.113121,
+            -0.580687, 0.472, 0.113121
             ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
         laptopScreenVertexPositionBuffer.itemSize = 3;
@@ -542,7 +542,7 @@
              0.000000, -0.965926, 0.258819,
              0.000000, -0.965926, 0.258819,
              0.000000, -0.965926, 0.258819,
-             0.000000, -0.965926, 0.258819,
+             0.000000, -0.965926, 0.258819
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
         laptopScreenVertexNormalBuffer.itemSize = 3;
@@ -554,7 +554,7 @@
             1.0, 1.0,
             0.0, 1.0,
             1.0, 0.0,
-            0.0, 0.0,
+            0.0, 0.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
         laptopScreenVertexTextureCoordBuffer.itemSize = 2;
@@ -601,7 +601,7 @@
             if (request.readyState == 4) {
                 handleLoadedLaptop(JSON.parse(request.responseText));
             }
-        }
+        };
         request.send();
     }
 

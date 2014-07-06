@@ -141,7 +141,7 @@
     }
 
 
-    var crateTextures = Array();
+    var crateTextures = [];
 
     function initTexture() {
         var crateImage = new Image();
@@ -154,7 +154,7 @@
 
         crateImage.onload = function () {
             handleLoadedTexture(crateTextures)
-        }
+        };
         crateImage.src = "crate.gif";
     }
 
@@ -289,7 +289,7 @@
             -1.0, -1.0, -1.0,
             -1.0, -1.0,  1.0,
             -1.0,  1.0,  1.0,
-            -1.0,  1.0, -1.0,
+            -1.0,  1.0, -1.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
         cubeVertexPositionBuffer.itemSize = 3;
@@ -332,7 +332,7 @@
             0.0, 0.0,
             1.0, 0.0,
             1.0, 1.0,
-            0.0, 1.0,
+            0.0, 1.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
         cubeVertexTextureCoordBuffer.itemSize = 2;
@@ -347,7 +347,7 @@
             12, 13, 14,   12, 14, 15, // Bottom face
             16, 17, 18,   16, 18, 19, // Right face
             20, 21, 22,   20, 22, 23  // Left face
-        ]
+        ];
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
         cubeVertexIndexBuffer.itemSize = 1;
         cubeVertexIndexBuffer.numItems = 36;

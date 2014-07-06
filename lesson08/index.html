@@ -168,7 +168,7 @@
         glassTexture.image = new Image();
         glassTexture.image.onload = function () {
             handleLoadedTexture(glassTexture)
-        }
+        };
 
         glassTexture.image.src = "glass.gif";
     }
@@ -391,7 +391,7 @@
             0.0, 0.0,
             1.0, 0.0,
             1.0, 1.0,
-            0.0, 1.0,
+            0.0, 1.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
         cubeVertexTextureCoordBuffer.itemSize = 2;

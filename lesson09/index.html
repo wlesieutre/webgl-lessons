@@ -139,7 +139,7 @@
         starTexture.image = new Image();
         starTexture.image.onload = function () {
             handleLoadedTexture(starTexture)
-        }
+        };
 
         starTexture.image.src = "star.gif";
     }
@@ -296,7 +296,7 @@
 
         // Draw the star in its main color
         gl.uniform3f(shaderProgram.colorUniform, this.r, this.g, this.b);
-        drawStar()
+        drawStar();
 
         mvPopMatrix();
     };

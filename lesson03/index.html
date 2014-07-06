@@ -187,7 +187,7 @@
 
         squareVertexColorBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
-        colors = []
+        colors = [];
         for (var i=0; i < 4; i++) {
             colors = colors.concat([0.5, 0.5, 1.0, 1.0]);
         }
@@ -273,7 +273,7 @@
     function webGLStart() {
         var canvas = document.getElementById("lesson03-canvas");
         initGL(canvas);
-        initShaders()
+        initShaders();
         initBuffers();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);

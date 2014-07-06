@@ -201,14 +201,14 @@
         earthColorMapTexture.image = new Image();
         earthColorMapTexture.image.onload = function () {
             handleLoadedTexture(earthColorMapTexture)
-        }
+        };
         earthColorMapTexture.image.src = "earth.jpg";
 
         earthSpecularMapTexture = gl.createTexture();
         earthSpecularMapTexture.image = new Image();
         earthSpecularMapTexture.image.onload = function () {
             handleLoadedTexture(earthSpecularMapTexture)
-        }
+        };
         earthSpecularMapTexture.image.src = "earth-specular.gif";
     }
 
