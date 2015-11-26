@@ -4,8 +4,8 @@
 <title>Learning WebGL &mdash; lesson 3</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
-<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="../js/gl-matrix-2.2.1.js"></script>
+<script type="text/javascript" src="../js/webgl-utils.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -39,7 +39,7 @@
 
     function initGL(canvas) {
         try {
-            gl = canvas.getContext("experimental-webgl");
+            gl = canvas.getContext("webgl");
             gl.viewportWidth = canvas.width;
             gl.viewportHeight = canvas.height;
         } catch (e) {
@@ -120,7 +120,8 @@
 
     function mvPushMatrix() {
         var copy = mat4.create();
-        mat4.set(mvMatrix, copy);
+        // Update: mat4.set(mvMatrix, copy); mat4.set() was removed from gl-matrix, use mat4.copy().
+        mat4.copy(copy, mvMatrix);
         mvMatrixStack.push(copy);
     }
 
@@ -186,7 +187,7 @@
 
         squareVertexColorBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
-        colors = []
+        colors = [];
         for (var i=0; i < 4; i++) {
             colors = colors.concat([0.5, 0.5, 1.0, 1.0]);
         }
@@ -204,14 +205,20 @@
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        // Update: mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix); mat4.perspective() API has changed.
+        mat4.perspective (pMatrix, 45.0, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
+        // Update: mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by. z altered to
+        // approximate original scene.
+        mat4.translate(mvMatrix, mvMatrix, [-1.5, 0.0, -5.4]);
 
         mvPushMatrix();
-        mat4.rotate(mvMatrix, degToRad(rTri), [0, 1, 0]);
+        // Update: mat4.rotate(mvMatrix, degToRad(rTri), [0, 1, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
+        // where out is the receiving matrix and a is the matrix to rotate.
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(rTri), [0, 1, 0]);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -224,10 +231,10 @@
         mvPopMatrix();
 
 
-        mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
+        mat4.translate(mvMatrix, mvMatrix, [3.0, 0.0, 0.0]);
 
         mvPushMatrix();
-        mat4.rotate(mvMatrix, degToRad(rSquare), [1, 0, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(rSquare), [1, 0, 0]);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -266,7 +273,7 @@
     function webGLStart() {
         var canvas = document.getElementById("lesson03-canvas");
         initGL(canvas);
-        initShaders()
+        initShaders();
         initBuffers();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);

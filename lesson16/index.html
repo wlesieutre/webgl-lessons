@@ -4,8 +4,8 @@
 <title>Learning WebGL &mdash; lesson 16</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
-<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="../js/gl-matrix-2.2.1.js"></script>
+<script type="text/javascript" src="../js/webgl-utils.js"></script>
 
 <script id="per-fragment-lighting-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -101,7 +101,7 @@
 
     function initGL(canvas) {
         try {
-            gl = canvas.getContext("experimental-webgl");
+            gl = canvas.getContext("webgl");
             gl.viewportWidth = canvas.width;
             gl.viewportHeight = canvas.height;
         } catch (e) {
@@ -213,14 +213,14 @@
         moonTexture.image = new Image();
         moonTexture.image.onload = function () {
             handleLoadedTexture(moonTexture)
-        }
+        };
         moonTexture.image.src = "moon.gif";
 
         crateTexture = gl.createTexture();
         crateTexture.image = new Image();
         crateTexture.image.onload = function () {
             handleLoadedTexture(crateTexture)
-        }
+        };
         crateTexture.image.src = "crate.gif";
     }
 
@@ -231,7 +231,8 @@
 
     function mvPushMatrix() {
         var copy = mat4.create();
-        mat4.set(mvMatrix, copy);
+        // Update: mat4.set(mvMatrix, copy); mat4.set() was removed from gl-matrix, use mat4.copy().
+        mat4.copy(copy, mvMatrix);
         mvMatrixStack.push(copy);
     }
 
@@ -247,8 +248,11 @@
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 
         var normalMatrix = mat3.create();
-        mat4.toInverseMat3(mvMatrix, normalMatrix);
-        mat3.transpose(normalMatrix);
+        // Update:
+        //   mat4.toInverseMat3(mvMatrix, normalMatrix);
+        //   mat3.transpose(normalMatrix);
+        // These two methods have been combined into a single method in the mat3 class, mat3.normalFromMat4().
+        mat3.normalFromMat4(normalMatrix, mvMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
 
@@ -339,7 +343,7 @@
             -1.0, -1.0, -1.0,
             -1.0, -1.0,  1.0,
             -1.0,  1.0,  1.0,
-            -1.0,  1.0, -1.0,
+            -1.0,  1.0, -1.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
         cubeVertexPositionBuffer.itemSize = 3;
@@ -382,7 +386,7 @@
             -1.0,  0.0,  0.0,
             -1.0,  0.0,  0.0,
             -1.0,  0.0,  0.0,
-            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
         cubeVertexNormalBuffer.itemSize = 3;
@@ -526,7 +530,7 @@
              0.580687, 0.659, 0.813106,
             -0.580687, 0.659, 0.813107,
              0.580687, 0.472, 0.113121,
-            -0.580687, 0.472, 0.113121,
+            -0.580687, 0.472, 0.113121
             ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
         laptopScreenVertexPositionBuffer.itemSize = 3;
@@ -538,7 +542,7 @@
              0.000000, -0.965926, 0.258819,
              0.000000, -0.965926, 0.258819,
              0.000000, -0.965926, 0.258819,
-             0.000000, -0.965926, 0.258819,
+             0.000000, -0.965926, 0.258819
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
         laptopScreenVertexNormalBuffer.itemSize = 3;
@@ -550,7 +554,7 @@
             1.0, 1.0,
             0.0, 1.0,
             1.0, 0.0,
-            0.0, 0.0,
+            0.0, 0.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
         laptopScreenVertexTextureCoordBuffer.itemSize = 2;
@@ -597,7 +601,7 @@
             if (request.readyState == 4) {
                 handleLoadedLaptop(JSON.parse(request.responseText));
             }
-        }
+        };
         request.send();
     }
 
@@ -630,12 +634,16 @@
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [0, 0, -5]);
-        mat4.rotate(mvMatrix, degToRad(30), [1, 0, 0]);
+        // Update: mat4.translate(mvMatrix, [0, 0, -5]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
+        mat4.translate(mvMatrix, mvMatrix, [0, 0, -5]);
+        // Update: mat4.rotate(mvMatrix, degToRad(30), [1, 0, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
+        // where out is the receiving matrix and a is the matrix to rotate.
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(30), [1, 0, 0]);
 
         mvPushMatrix();
-        mat4.rotate(mvMatrix, degToRad(moonAngle), [0, 1, 0]);
-        mat4.translate(mvMatrix, [2, 0, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(moonAngle), [0, 1, 0]);
+        mat4.translate(mvMatrix, mvMatrix, [2, 0, 0]);
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, moonTexture);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
@@ -656,8 +664,8 @@
 
 
         mvPushMatrix();
-        mat4.rotate(mvMatrix, degToRad(cubeAngle), [0, 1, 0]);
-        mat4.translate(mvMatrix, [1.25, 0, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(cubeAngle), [0, 1, 0]);
+        mat4.translate(mvMatrix, mvMatrix, [1.25, 0, 0]);
         gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -693,15 +701,17 @@
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        // Update: mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix); mat4.perspective() API has changed.
+        mat4.perspective (pMatrix, 45.0, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
 
         mat4.identity(mvMatrix);
 
         mvPushMatrix();
 
-        mat4.translate(mvMatrix, [0, -0.4, -2.2]);
-        mat4.rotate(mvMatrix, degToRad(laptopAngle), [0, 1, 0]);
-        mat4.rotate(mvMatrix, degToRad(-90), [1, 0, 0]);
+        // z altered to approximate original scene.
+        mat4.translate(mvMatrix, mvMatrix, [0, -0.4, -1.7]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(laptopAngle), [0, 1, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(-90), [1, 0, 0]);
 
         gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, true);
         gl.uniform3f(shaderProgram.pointLightingLocationUniform, -1, 2, -1);

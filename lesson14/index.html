@@ -4,8 +4,8 @@
 <title>Learning WebGL &mdash; lesson 14</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
-<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="../js/gl-matrix-2.2.1.js"></script>
+<script type="text/javascript" src="../js/webgl-utils.js"></script>
 
 <script id="per-fragment-lighting-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -90,7 +90,7 @@
 
     function initGL(canvas) {
         try {
-            gl = canvas.getContext("experimental-webgl");
+            gl = canvas.getContext("webgl");
             gl.viewportWidth = canvas.width;
             gl.viewportHeight = canvas.height;
         } catch (e) {
@@ -198,14 +198,14 @@
         earthTexture.image = new Image();
         earthTexture.image.onload = function () {
             handleLoadedTexture(earthTexture)
-        }
+        };
         earthTexture.image.src = "earth.jpg";
 
         galvanizedTexture = gl.createTexture();
         galvanizedTexture.image = new Image();
         galvanizedTexture.image.onload = function () {
             handleLoadedTexture(galvanizedTexture)
-        }
+        };
         galvanizedTexture.image.src = "arroway.de_metal+structure+06_d100_flat.jpg";
     }
 
@@ -216,7 +216,8 @@
 
     function mvPushMatrix() {
         var copy = mat4.create();
-        mat4.set(mvMatrix, copy);
+        // Update: mat4.set(mvMatrix, copy); mat4.set() was removed from gl-matrix, use mat4.copy().
+        mat4.copy(copy, mvMatrix);
         mvMatrixStack.push(copy);
     }
 
@@ -232,8 +233,11 @@
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 
         var normalMatrix = mat3.create();
-        mat4.toInverseMat3(mvMatrix, normalMatrix);
-        mat3.transpose(normalMatrix);
+        // Update:
+        //   mat4.toInverseMat3(mvMatrix, normalMatrix);
+        //   mat3.transpose(normalMatrix);
+        // These two methods have been combined into a single method in the mat3 class, mat3.normalFromMat4().
+        mat3.normalFromMat4(normalMatrix, mvMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
 
@@ -283,7 +287,7 @@
             if (request.readyState == 4) {
                 handleLoadedTeapot(JSON.parse(request.responseText));
             }
-        }
+        };
         request.send();
     }
 
@@ -299,7 +303,8 @@
             return;
         }
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        // Update: mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix); mat4.perspective() API has changed.
+        mat4.perspective (pMatrix, 45.0, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
 
         var specularHighlights = document.getElementById("specular").checked;
         gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, specularHighlights);
@@ -341,9 +346,14 @@
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [0, 0, -40]);
-        mat4.rotate(mvMatrix, degToRad(23.4), [1, 0, -1]);
-        mat4.rotate(mvMatrix, degToRad(teapotAngle), [0, 1, 0]);
+        // Update: mat4.translate(mvMatrix, [0, 0, -40]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by. z and
+        // DOM element "lightPositionZ" altered to approximate original scene.
+        mat4.translate(mvMatrix, mvMatrix, [0, 0, -32]);
+        // Update: mat4.rotate(mvMatrix, degToRad(23.4), [1, 0, -1]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
+        // where out is the receiving matrix and a is the matrix to rotate.
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(23.4), [1, 0, -1]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(teapotAngle), [0, 1, 0]);
 
         gl.activeTexture(gl.TEXTURE0);
         if (texture == "earth") {
@@ -457,7 +467,7 @@
             <td><b>Location:</b>
             <td>X: <input type="text" id="lightPositionX" value="-10.0" />
             <td>Y: <input type="text" id="lightPositionY" value="4.0" />
-            <td>Z: <input type="text" id="lightPositionZ" value="-20.0" />
+            <td>Z: <input type="text" id="lightPositionZ" value="-16.0" />
         </tr>
         <tr>
             <td><b>Specular colour:</b>

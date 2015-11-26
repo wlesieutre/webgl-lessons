@@ -87,7 +87,7 @@
   var gl;
   function initGL(canvas) {
     try {
-      gl = canvas.getContext("experimental-webgl");
+      gl = canvas.getContext("webgl");
       gl.viewportWidth = canvas.width;
       gl.viewportHeight = canvas.height;
     } catch(e) {
@@ -175,7 +175,7 @@
          1.0,  1.0,
         -1.0,  1.0,
          1.0, -1.0,
-        -1.0, -1.0,
+        -1.0, -1.0
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
     vertexPositionBuffer.itemSize = 2;
@@ -188,7 +188,7 @@
       [ 0.7,  1.2],
       [-2.2,  1.2],
       [ 0.7, -1.2],
-      [-2.2, -1.2],
+      [-2.2, -1.2]
   ];
   function drawScene() {
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
@@ -214,7 +214,7 @@
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-    gl.deleteBuffer(plotPositionBuffer)
+    gl.deleteBuffer(plotPositionBuffer);
 
     zoom *= 1.02;
     document.getElementById("zoomOutput").value = zoom;
@@ -243,7 +243,7 @@
 
     var canvas = document.getElementById("example01-canvas");
     initGL(canvas);
-    initShaders()
+    initShaders();
     initBuffers();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);

@@ -4,8 +4,8 @@
 <title>Learning WebGL &mdash; lesson 10</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
-<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="../js/gl-matrix-2.2.1.js"></script>
+<script type="text/javascript" src="../js/webgl-utils.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -41,7 +41,7 @@
 
     function initGL(canvas) {
         try {
-            gl = canvas.getContext("experimental-webgl");
+            gl = canvas.getContext("webgl");
             gl.viewportWidth = canvas.width;
             gl.viewportHeight = canvas.height;
         } catch (e) {
@@ -135,7 +135,7 @@
         mudTexture.image = new Image();
         mudTexture.image.onload = function () {
             handleLoadedTexture(mudTexture)
-        }
+        };
 
         mudTexture.image.src = "mud.gif";
     }
@@ -147,7 +147,8 @@
 
     function mvPushMatrix() {
         var copy = mat4.create();
-        mat4.set(mvMatrix, copy);
+        // Update: mat4.set(mvMatrix, copy); mat4.set() was removed from gl-matrix, use mat4.copy().
+        mat4.copy(copy, mvMatrix);
         mvMatrixStack.push(copy);
     }
 
@@ -191,7 +192,8 @@
 
     var xPos = 0;
     var yPos = 0.4;
-    var zPos = 0;
+    // Update: zPos altered to approximate original scene.
+    var zPos = -0.5;
 
     var speed = 0;
 
@@ -276,7 +278,7 @@
             if (request.readyState == 4) {
                 handleLoadedWorld(request.responseText);
             }
-        }
+        };
         request.send();
     }
 
@@ -290,13 +292,18 @@
             return;
         }
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        // Update: mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix); mat4.perspective() API has changed.
+        mat4.perspective (pMatrix, 45.0, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
 
         mat4.identity(mvMatrix);
 
-        mat4.rotate(mvMatrix, degToRad(-pitch), [1, 0, 0]);
-        mat4.rotate(mvMatrix, degToRad(-yaw), [0, 1, 0]);
-        mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]);
+        // Update: mat4.rotate(mvMatrix, degToRad(-pitch), [1, 0, 0]); mat4.rotate() API has changed to mat4.rotate(out, a, rad, axis)
+        // where out is the receiving matrix and a is the matrix to rotate.
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(-pitch), [1, 0, 0]);
+        mat4.rotate(mvMatrix, mvMatrix, degToRad(-yaw), [0, 1, 0]);
+        // Update: mat4.translate(mvMatrix, [-xPos, -yPos, -zPos]); mat4.translate() API has changed to mat4.translate(out, a, v)
+        // where out is the receiving matrix, a is the matrix to translate, and v is the vector to translate by.
+        mat4.translate(mvMatrix, mvMatrix, [-xPos, -yPos, -zPos]);
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, mudTexture);
